@@ -7,7 +7,7 @@ from keras import losses
 from keras import optimizers
 
 
-
+# the same as: from keras.utils import to_categorical and than to_categorical(train_labels)
 def vectorize_sequences(sequences, dimension = 10000):
     results = np.zeros((len(sequences),dimension))
     for i,sequence in enumerate(sequences):
