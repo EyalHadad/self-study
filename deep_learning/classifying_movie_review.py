@@ -74,7 +74,6 @@ def show_loss_plot(history_dict):
 def create_model():
     model = models.Sequential()
     model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
-    model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
     model.add(layers.Dense(16, activation='relu'))
     model.add(layers.Dense(1, activation='sigmoid'))
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])

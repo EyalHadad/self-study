@@ -39,6 +39,6 @@ def tmp_tries():
 
 
 if __name__ == '__main__':
-    tmp_tries()
-    # run_func()
+    # tmp_tries()
+    run_func()
 
