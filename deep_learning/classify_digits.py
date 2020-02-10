@@ -23,8 +23,8 @@ def run_func():
 
     train_labels = to_categorical(train_labels)
     test_labels = to_categorical(test_labels)
-    network.fit(train_img,train_labels,epochs=5,batch_size=128)
-    test_loss, test_acc = network.evaluate(test_img,test_labels)
+    network.fit(train_img, train_labels, epochs=5, batch_size=128)
+    test_loss, test_acc = network.evaluate(test_img, test_labels)
     print("test acc: " + str(test_acc))
 
     i=5
