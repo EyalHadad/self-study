@@ -1,6 +1,7 @@
 import os
 import shutil
 from keras import layers, models, optimizers
+from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 import pickle
@@ -63,6 +64,7 @@ def create_model():
     model.add(layers.Conv2D(128, (3, 3), activation='relu'))
     model.add(layers.MaxPool2D((2, 2)))
     model.add(layers.Flatten())  # multiple all layer sizes
+    model.add(layers.Dropout(0.5))
     model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer=optimizers.RMSprop(lr=1e-4), metrics=['acc'])  # crossentropy
@@ -85,16 +87,24 @@ def data_preprocessing(train_dir, validation_dir):
     return t_generator, val_generator
 
 
-def train_and_save_model(train_gen, validation_gen):
+def train_and_save_model(train_path, validation_path):
     model = create_model()
-    history = model.fit(train_gen, steps_per_epoch=100, epochs=30, validation_data=validation_gen, validation_steps=50)
+    #define generators
+    train_datagen = ImageDataGenerator(rescale=1./255,rotation_range=40,width_shift_range=0.2,height_shift_range=0.2,shear_range=0.2,zoom_range=0.2,horizontal_flip=True,fill_mode='nearest')
+    test_datagen = ImageDataGenerator(rescale=1./255) # validation data shouldn't be augmented
+    # use the generators
+    t_generator = train_datagen.flow_from_directory(train_path, target_size=(150, 150), batch_size=32,class_mode='binary')
+    v_generator = test_datagen.flow_from_directory(validation_path, target_size=(150, 150), batch_size=32,class_mode='binary')
+
+
+    history = model.fit_generator(t_generator, steps_per_epoch=100, epochs=100, validation_data=v_generator, validation_steps=50)
     # steps_per_epochs is the number of batches needed to finish one epoch (batch size set to be 20 when we define
     # the generator) - it is important because it generate endless data
     # validation_data not necessarily a generator
     # validation_steps - how many batches the validation include (50 batches of 20 images)
-    model.save('cats_and_dogs_small_1.h5')
-    with open('/trainHistoryDict', 'wb') as file_pi:
-        pickle.dump(history.history, file_pi)
+    model.save('cats_and_dogs_small_2.h5')
+    with open('trainHistoryDict', 'wb') as file_pi:
+        pickle.dump(history, file_pi)
     return history
 
 
@@ -109,7 +119,7 @@ def show_results(history):
     plt.plot(epochs, acc, 'bo', label='Training acc')
     plt.plot(epochs, val_acc, 'b', label='Validation acc')
     plt.title('Training and Validation accuracy')
-    plt.legend() # for the two lines, can get parameters such as loc='upper left' fro locating the lines "menu"
+    plt.legend() # for the two lines, can get parameters such as loc='upper left' for locating the lines "menu"
 
     plt.figure()
 
@@ -120,12 +130,44 @@ def show_results(history):
 
     plt.show()
 
+
+def get_model_history():
+    loaded_model = load_model('cats_and_dogs_small_1.h5')
+    with open('trainHistoryDict', 'rb') as file_pi:
+        history = pickle.load(file_pi)
+
+    return history, loaded_model
+
+
+def augment_picture(train_path):
+    datagen = ImageDataGenerator(rotation_range=40,width_shift_range=0.2,height_shift_range=0.2,shear_range=0.2,zoom_range=0.2,horizontal_flip=True,fill_mode='nearest')
+    #rotation_range range within which to randomly rotate pictures
+    #hight/width_shift how mush to make the picture higher or wider
+    #shear/zoom_range how much to cut/zoom into the picture
+    #horizontal_flip randomly flip half of the picture horizontally
+    #fill_mode strategy used for filling newly created pixels, which can appear after rotation
+    train_cats_dir = os.path.join(train_path, 'cats')
+    fnames = [os.path.join(train_cats_dir,fname) for fname in os.listdir(train_cats_dir)]
+    img = image.load_img(fnames[3],target_size=(150,150)) #reads the image and resizes it
+    x = image.img_to_array(img) #convert the image into np array with shape of (150,150,3) due to the resize parameter and the RGB mode
+    x = x.reshape((1,) + x.shape) #reshape it into (1,150,150,3)
+    i=0
+    for batch in datagen.flow(x,batch_size=1):
+        plt.figure(i)
+        imgplot = plt.imshow(image.array_to_img(batch[0]))
+        i += 1
+        if i%4 ==0:
+            break
+    plt.show()
+
+
 if __name__ == '__main__':
-    # m = create_model()
-    # paths = arrange_data(r'C:\Users\user\Desktop\source_cat_dog', r'C:\Users\user\Desktop\cats_dogs')
-    train_dir = os.path.join(r'C:\Users\user\Desktop\cats_dogs', 'train')
-    valid_dir = os.path.join(r'C:\Users\user\Desktop\cats_dogs', 'validation')
-    train_generator, validation_generator = data_preprocessing(train_dir, valid_dir)
-    his_dict = train_and_save_model(train_generator, validation_generator)
+    # paths = arrange_data(r'C:\Users\Eyal-TLV\Desktop\Studies\cats_dogs_orig\train', r'C:\Users\Eyal-TLV\Desktop\Studies\cats_dogs')
+    train_dir = os.path.join(r'C:\Users\Eyal-TLV\Desktop\Studies\cats_dogs', 'train')
+    valid_dir = os.path.join(r'C:\Users\Eyal-TLV\Desktop\Studies\cats_dogs', 'validation')
+    # train_generator, validation_generator = data_preprocessing(train_dir, valid_dir) # redundant stay just for explanations
+    # augment_picture(train_dir)# redundant stay just for explanations
+    his_dict = train_and_save_model(train_dir, valid_dir)
+    # his_dict,l_model = get_model_history()
     show_results(his_dict)
     i = 5
