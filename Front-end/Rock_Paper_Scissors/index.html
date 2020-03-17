@@ -1,0 +1,36 @@
+<html> 	 	
+	<head>
+		<meta charset="utf-8">
+		<title> Rock Paper Scissors Game</title> <!--What will apper in the chrom tab-->
+		<link rel="stylesheet" href="my_style.css"  <!--link to the css file for style-->
+	</head>
+	<body>
+		<header>
+			<h1>Rock Paper Scissors</h1> <!--The header of the page-->
+		</header>
+		
+		<div class="score-board"> <!--class definition-->
+			<div id="user-label" class="badge">user</div> <!--The class include 2 class and score-->
+			<div id="comp-label" class="badge">comp</div> 
+			<span id="user-score">0</span>:<span id = "computer-score">0</span> <!--Generic inline container for inline elements-->
+		</div>
+		<div class="result"> <!--class definition-->
+			<p>Paper cover rock. You win!</p>
+		</div>
+		
+		<div class="choices"> <!--class definition-->
+			<div class="choice" id="r"> <!--class definition-->
+				<img src="rock.png" alt="">
+			</div>
+			<div class="choice" id="p">
+				<img src="paper.png" alt="">
+			</div>
+			<div class="choice" id="s">
+				<img src="scissors.png" alt="">
+			</div>
+		</div>
+		<p id="action-message"> Make your move</p>
+		<script src="app.js" charset="utf-8"></script> <!--link to the java script file-->
+	</body>
+	
+</html>
