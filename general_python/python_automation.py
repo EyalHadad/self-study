@@ -12,6 +12,24 @@ def move_mouse():
         pyautogui.typewrite("It works!!")
 
 
+def open_word():
+    pyautogui.press('winleft')
+    time.sleep(1)
+    pyautogui.typewrite("word")
+    time.sleep(1)
+    pyautogui.press('enter')
+    time.sleep(2)
+    pyautogui.press('enter')
+    time.sleep(2)
+    pyautogui.typewrite("It works!!")
+    time.sleep(2)
+    pyautogui.hotkey('altleft', 'f4')
+    time.sleep(2)
+    pyautogui.press('tab', presses=5)
+    pyautogui.press('enter')
+
+
+
 def open_youtube_song():
     driver = webdriver.Chrome()
     driver.maximize_window()
@@ -25,5 +43,6 @@ def open_youtube_song():
     search_button.click()
 
 if __name__=="__main__":
+    open_word()
     # open_youtube_song()
-    move_mouse()
+    # move_mouse()
