@@ -4,12 +4,12 @@ import pyautogui
 
 
 def move_mouse():
-    for i in range(5):
+    for i in range(10):
         pyautogui.moveTo(100, 100, duration=0.25)
         pyautogui.moveTo(200, 100, duration=0.25)
         pyautogui.moveTo(200, 200, duration=0.25)
         pyautogui.moveTo(100, 200, duration=0.25)
-        pyautogui.typewrite("It works!!")
+        # pyautogui.typewrite("It works!!")
 
 
 def open_word():
@@ -43,6 +43,6 @@ def open_youtube_song():
     search_button.click()
 
 if __name__=="__main__":
-    open_word()
+    # open_word()
     # open_youtube_song()
-    # move_mouse()
+    move_mouse()
