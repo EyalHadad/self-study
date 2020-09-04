@@ -8,10 +8,11 @@ def jason_parse(json_path):
 
     print(content)
 
+
 def jason_parse_write(json_path):
-    write_dict = {"First": "Eyal", "Last": "Hadad", "Phone": ["0547248850","026428899"]}
+    write_dict = {"First": "Eyal", "Last": "Hadad", "Phone": ["0547248850", "026428899"]}
     with open(json_path, "w") as f:
-        json.dump(write_dict,f)
+        json.dump(write_dict, f)
 
     with open(json_path, "a") as f:
         f.write("\n")
@@ -28,8 +29,7 @@ def xml_parse(xml_path):
     i = 7
 
 
-
-if __name__=='__main__':
+if __name__ == '__main__':
     # jason_parse(r'C:\Users\Eyal-TLV\Desktop\readJson.json')
     # jason_parse_write(r'C:\Users\Eyal-TLV\Desktop\readJsonWrite.json')
     xml_parse(r'C:\Users\Eyal-TLV\Desktop\xml_example.xml')

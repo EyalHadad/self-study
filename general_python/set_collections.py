@@ -3,6 +3,7 @@ import pandas as pd
 from pandasql import sqldf
 from pandasql import load_births
 
+
 # print(sqlite3.version)
 # print(sqlite3.sqlite_version)
 
@@ -23,6 +24,7 @@ def memory_sql_database():
     print(dfbook.head())
     cursor.close()
 
+
 def chinook_sql_database():
     conn = sqlite3.connect('chinook.db')
     # to connect an existing DB, in our case we connect to out memory and not remote DB
@@ -37,7 +39,8 @@ def chinook_sql_database():
     dftablist = pd.read_sql_query("SELECT name FROM sqlite_master where type = 'table';", conn)
     print(dftablist.head())
     conn.close()
-    i=4
+    i = 4
+
 
 if __name__ == '__main__':
     chinook_sql_database()
